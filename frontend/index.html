@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Notch/island-safe viewport on iOS/Android -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sortex — Phishing Detection</title>
+    <meta name="description" content="Advanced real-time phishing URL detection powered by heuristic scoring and VirusTotal threat intelligence.">
+
+    <!-- Mobile browser chrome colour -->
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- iOS PWA / home-screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sortex">
+
+    <!-- Prevent tap-callout on iOS -->
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        /* Safe-area padding for notched devices */
+        body {
+            padding-left:  max(0.75rem, env(safe-area-inset-left));
+            padding-right: max(0.75rem, env(safe-area-inset-right));
+            padding-bottom:max(1.5rem,  env(safe-area-inset-bottom));
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Red vignette overlay on phishing detected -->
+    <div id="alert-overlay"></div>
+
+    <div id="main-container" class="container">
+
+        <!-- Header -->
+        <header class="app-header physics-element">
+            <div class="logo-word">
+                <span class="logo-s">SORT</span><span class="logo-ex">EX</span>
+            </div>
+            <p class="tagline">Phishing Detection System</p>
+            <p class="sub-tagline">Heuristic + VirusTotal Threat Intelligence</p>
+        </header>
+
+        <!-- Scan Form -->
+        <section class="scan-section physics-element">
+            <form id="scan-form">
+                <div class="input-wrap">
+                    <span class="input-icon">🔗</span>
+                    <input type="url" id="url-input"
+                           placeholder="https://enter-url-to-scan.com"
+                           required autocomplete="off" spellcheck="false">
+                </div>
+                <button type="submit" id="scan-btn">
+                    <span class="btn-icon">⚡</span> SCAN NOW
+                </button>
+            </form>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Scanning via Heuristic Engine + VirusTotal…</p>
+            </div>
+
+            <!-- Inline error -->
+            <div id="error-message" class="hidden"></div>
+
+            <!-- VT notice (pending / rate-limited) -->
+            <div id="vt-notice" class="hidden vt-notice"></div>
+        </section>
+
+        <!-- Results -->
+        <section id="results-panel" class="results-panel hidden physics-element">
+            <h2 id="result-status"></h2>
+
+            <!-- VirusTotal Stats -->
+            <div class="stats-grid">
+                <div class="stat-card" data-type="malicious">
+                    <span class="stat-label">VT Malicious</span>
+                    <span class="stat-value" id="stat-malicious">—</span>
+                </div>
+                <div class="stat-card" data-type="suspicious">
+                    <span class="stat-label">VT Suspicious</span>
+                    <span class="stat-value" id="stat-suspicious">—</span>
+                </div>
+                <div class="stat-card" data-type="harmless">
+                    <span class="stat-label">Harmless</span>
+                    <span class="stat-value" id="stat-harmless">—</span>
+                </div>
+                <div class="stat-card" data-type="undetected">
+                    <span class="stat-label">Undetected</span>
+                    <span class="stat-value" id="stat-undetected">—</span>
+                </div>
+            </div>
+
+            <!-- Heuristic Breakdown -->
+            <div id="heuristic-panel" class="heuristic-panel hidden">
+                <p id="heuristic-score" class="heuristic-score-label"></p>
+                <ul id="heuristic-reasons" class="heuristic-reasons"></ul>
+            </div>
+
+            <button id="copy-btn">📋 Copy Shareable Report</button>
+        </section>
+
+        <!-- Scan History -->
+        <section class="history-section physics-element">
+            <h3>⏱ Recent Scans</h3>
+            <ul id="history-list"></ul>
+        </section>
+
+        <!-- Reset (shown only during phishing physics mode) -->
+        <button id="reset-btn" class="hidden physics-element">🔄 RESET SYSTEM</button>
+
+    </div>
+
+    <!-- Matter.js Physics Engine (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

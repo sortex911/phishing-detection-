@@ -1,5 +1,19 @@
 {
+  "builds": [
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python"
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/check",
+      "destination": "/backend/app.py"
+    },
     {
       "source": "/(.*)",
       "destination": "/frontend/$1"
